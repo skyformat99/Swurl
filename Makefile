@@ -15,8 +15,8 @@ include $(DEVKITPRO)/libnx/switch_rules
 # INCLUDES is a list of directories containing header files
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
-SOURCES		:=	source source/Swirl
-INCLUDES	:=	include include/Swirl
+SOURCES		:=	source source/Swurl
+INCLUDES	:=	include include/Swurl
 
 #---------------------------------------------------------------------------------
 # options for code generation

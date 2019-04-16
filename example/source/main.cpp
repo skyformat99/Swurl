@@ -1,37 +1,37 @@
-// SimpleIniParser
-// Copyright (C) 2019 Steven Mattera
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+/*
+ * Swurl
+ * Copyright (c) 2019 Steven Mattera
+ * 
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above 
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
 
 #include <iostream>
 #include <switch.h>
-#include <Swirl.hpp>
+#include <Swurl.hpp>
 
-using namespace swirl;
+using namespace swurl;
 using namespace std;
 
-void swirlProgressUpdate(WebRequest * request, double progress);
-void swirlOnCompleted(WebRequest * request);
-void swirlOnError(WebRequest * request, string error);
+void swurlProgressUpdate(WebRequest * request, double progress);
+void swurlOnCompleted(WebRequest * request);
+void swurlOnError(WebRequest * request, string error);
 
 int main(int argc, char **argv) {
     SessionManager::initialize();
     consoleInit(NULL);
 
     // Global Settings
-    SessionManager::userAgent = "SwirlExample/1.0.0";
+    SessionManager::userAgent = "SwurlExample/1.0.0";
     SessionManager::requestHeaders.insert(
         pair<string, string>(
             "Cache-Control",
@@ -40,9 +40,9 @@ int main(int argc, char **argv) {
     );
 
     // Callbacks
-    SessionManager::onProgressChanged = swirlProgressUpdate;
-    SessionManager::onCompleted = swirlOnCompleted;
-    SessionManager::onError = swirlOnError;
+    SessionManager::onProgressChanged = swurlProgressUpdate;
+    SessionManager::onCompleted = swurlOnCompleted;
+    SessionManager::onError = swurlOnError;
 
     // Draw the progress.
     cout << "Downloading:   0%\n";
@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
     return 0;
 }
 
-void swirlProgressUpdate(WebRequest * request, double progress) {
+void swurlProgressUpdate(WebRequest * request, double progress) {
     int progressPercentage = (progress < 1) ? progress * 100 : 100;
     if (progressPercentage < 10) {
         cout << "\x1b[1;14H  " << progressPercentage;
@@ -100,13 +100,13 @@ void swirlProgressUpdate(WebRequest * request, double progress) {
     consoleUpdate(NULL);
 }
 
-void swirlOnCompleted(WebRequest * request) {
+void swurlOnCompleted(WebRequest * request) {
     cout << "\x1b[2;0HDownload Completed with status code " << request->response.statusCode << "!\n\n";
     cout << "Press any key to view response headers.\n";
     consoleUpdate(NULL);
 }
 
-void swirlOnError(WebRequest * request, string error) {
+void swurlOnError(WebRequest * request, string error) {
     cout << "\x1b[2;0HError: " << error << "\n\n";
     cout << "Press any key to close.\n";
     consoleUpdate(NULL);
