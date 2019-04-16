@@ -17,3 +17,4 @@
 
 #include "Swirl/SessionManager.hpp"
 #include "Swirl/WebRequest.hpp"
+#include "Swirl/WebResponse.hpp"

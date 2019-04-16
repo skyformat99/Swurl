@@ -27,6 +27,7 @@ namespace swirl {
     WebRequest::WebRequest(WebRequestMethod method, std::string url) {
         this->method = method;
         this->url = url;
+        this->sslVerifyHost = true;
     }
     
     WebRequest::WebRequest(WebRequestMethod method, std::string url, std::map<std::string, std::string> headers) : WebRequest(method, url) {

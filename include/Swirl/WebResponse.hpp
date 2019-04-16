@@ -23,8 +23,9 @@
 namespace swirl {
     class WebResponse {
         public:
-            std::map<std::string, std::string> responseHeaders;
+            std::map<std::string, std::string> headers;
             std::string rawResponseHeader;
             std::string rawResponseBody;
+            long statusCode;
     };
 }

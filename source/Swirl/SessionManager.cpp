@@ -24,6 +24,16 @@
 using namespace std;
 
 namespace swirl {
+    std::string SessionManager::proxyUrl = "";
+    std::string SessionManager::proxyUsername = "";
+    std::string SessionManager::proxyPassword = "";
+    std::string SessionManager::userAgent = "";
+    std::map<std::string, std::string> SessionManager::requestHeaders;
+
+    std::function<void(WebRequest *, double)> SessionManager::onProgressChanged;
+    std::function<void(WebRequest *)> SessionManager::onCompleted;
+    std::function<void(WebRequest *, std::string)> SessionManager::onError;
+
     void SessionManager::initialize() {
         socketInitializeDefault();
         curl_global_init(CURL_GLOBAL_ALL);
@@ -63,6 +73,11 @@ namespace swirl {
 
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, _getMethod(request).c_str());
         curl_easy_setopt(curl, CURLOPT_URL, request->url.c_str());
+        // TODO: For this to work you have to pass CURL a CA bundle.
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+        if (!request->sslVerifyHost) {
+            curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+        }
         curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, _writeHeader);
         curl_easy_setopt(curl, CURLOPT_HEADERDATA, (void *) request);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, _write);
@@ -80,13 +95,13 @@ namespace swirl {
             return;
         }
 
-        long http_code = 0;
-        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &request->response.statusCode);
 
         curl_easy_cleanup(curl);
         curl_slist_free_all(headers);
 
-        onCompleted(request, http_code);
+        _parseResponseHeader(request);
+        onCompleted(request);
     }
 
 
@@ -156,13 +171,18 @@ namespace swirl {
             istringstream ss(request->response.rawResponseHeader);
             string header;
             while(getline(ss, header)) {
+                if (header.size() == 0)
+                    continue;
+                
                 auto colonPos = header.find(":");
-                request->response.responseHeaders.insert(
-                    pair<string, string>(
-                        header.substr(0, colonPos),
-                        header.substr(colonPos + 2, header.size() - (colonPos + 2))
-                    )
-                );
+                if (colonPos != string::npos) {
+                    request->response.headers.insert(
+                        pair<string, string>(
+                            header.substr(0, colonPos),
+                            header.substr(colonPos + 2, header.size() - (colonPos + 2))
+                        )
+                    );
+                }
             }
         }
     }

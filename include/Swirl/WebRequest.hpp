@@ -35,6 +35,7 @@ namespace swirl {
             WebRequestMethod method;
             std::string url;
             std::map<std::string, std::string> headers;
+            bool sslVerifyHost;
             WebResponse response;
 
             WebRequest(std::string url);

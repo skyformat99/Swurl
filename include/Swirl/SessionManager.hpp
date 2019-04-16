@@ -34,7 +34,7 @@ namespace swirl {
             static std::map<std::string, std::string> requestHeaders;
 
             static std::function<void(WebRequest *, double)> onProgressChanged;
-            static std::function<void(WebRequest *, long)> onCompleted;
+            static std::function<void(WebRequest *)> onCompleted;
             static std::function<void(WebRequest *, std::string)> onError;
 
             static void initialize();
