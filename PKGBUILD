@@ -28,4 +28,5 @@ package() {
   source /opt/devkitpro/switchvars.sh
 
   make DESTDIR="$pkgdir" install
+  rm $pkgdir$PORTLIBS_PREFIX/LICENSE
 }
