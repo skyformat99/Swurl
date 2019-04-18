@@ -4,6 +4,14 @@ A wrapper library for CURL on the Nintendo Switch. The objective is to have a si
 
 ## Installation
 
+To install the latest release run the following:
+
+```bash
+makepkg -si
+```
+
+To build from source run the following:
+
 ```bash
 make
 sudo make install
