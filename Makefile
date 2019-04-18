@@ -14,7 +14,7 @@ include $(DEVKITPRO)/libnx/switch_rules
 # DATA is a list of directories containing data files
 # INCLUDES is a list of directories containing header files
 #---------------------------------------------------------------------------------
-TARGET		:=	$(notdir $(CURDIR))
+TARGET		:=	Swurl
 VERSION		:= 	1.0.0
 SOURCES		:=	source source/Swurl
 INCLUDES	:=	include include/Swurl
